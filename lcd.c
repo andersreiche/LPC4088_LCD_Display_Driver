@@ -26,7 +26,6 @@ void lcd_init(void) {
 	RW_W() // sets the display to write mode, this will never change
 	lcd_write_cmd(LCD_FORMAT);
 	lcd_write_cmd(LCD_CLEAR);
-
 }
 
 void lcd_write_data(char c) {
