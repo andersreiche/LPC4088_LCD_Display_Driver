@@ -1,40 +1,9 @@
 #include "board.h"
 #include "lcd.h"
 
-/*LCD data pins and ports*/
-#define DATA_PORT1 0
-#define DATA_PORT2 0
-#define DATA_PORT3 0
-#define DATA_PORT4 0
-#define DATA_PORT5 0
-#define DATA_PORT6 0
-#define DATA_PORT7 0
-#define DATA_PORT0 0
-#define DATA_PIN1 0
-#define DATA_PIN2 0
-#define DATA_PIN3 0
-#define DATA_PIN4 0
-#define DATA_PIN5 0
-#define DATA_PIN6 0
-#define DATA_PIN7 0
-#define DATA_PIN0 0
-
-/*LCD command pins and ports*/
-#define ENABLE_PORT 0
-#define ENABLE_PIN 0
-#define RS_PORT 0
-#define RS_PIN 0
-#define RW_PORT 0
-#define RW_PIN 0
-#define ENABLE_READY() Chip_GPIO_SetPinState(LPC_GPIO, ENABLE_PORT, ENABLE_PIN, 1);
-#define ENABLE_SEND() Chip_GPIO_SetPinState(LPC_GPIO, ENABLE_PORT, ENABLE_PIN, 0);
-#define RS_HIGH() Chip_GPIO_SetPinState(LPC_GPIO, RS_PORT, RS_PIN, 1);
-#define RS_LOW() Chip_GPIO_SetPinState(LPC_GPIO, RS_PORT, RS_PIN, 0);
-#define RW_W() Chip_GPIO_SetPinState(LPC_GPIO, RW_PORT, RW_PIN, 0);
-#define RW_R() Chip_GPIO_SetPinState(LPC_GPIO, RW_PORT, RW_PIN, 1);
 
 void setbus(char c) {
-	/* set bits 0-7 according to char*/
+	/* set bits 0-7 according to char which can be passed as: "0bxxxxxxxx" or char*/
 	Chip_GPIO_SetPinState(LPC_GPIO, DATA_PORT0, DATA_PIN0, c & 0b00000001);
 	Chip_GPIO_SetPinState(LPC_GPIO, DATA_PORT1, DATA_PIN1, c & 0b00000010);
 	Chip_GPIO_SetPinState(LPC_GPIO, DATA_PORT2, DATA_PIN2, c & 0b00000100);
@@ -64,7 +33,7 @@ void lcd_write_data(char c) {
 	datamode();
 	ENABLE_READY()
 	setbus(c);
-	delay_us(1);
+	delay_us(10);
 	ENABLE_SEND()
 }
 
@@ -72,10 +41,9 @@ void lcd_write_cmd(char c) {
 	commandmode();
 	ENABLE_READY()
 	setbus(c);
-	delay_us(1);
+	delay_us(10);
 	ENABLE_SEND()
 }
-
 
 void lcd_put_char(char c) {
 	lcd_write_data(c);
